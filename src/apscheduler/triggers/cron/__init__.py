@@ -6,7 +6,6 @@ from typing import Any, ClassVar
 
 import attrs
 from attr.validators import instance_of, optional
-from dateutil.tz import tz
 from tzlocal import get_localzone
 
 from ..._converters import as_aware_datetime, as_timezone
@@ -233,14 +232,7 @@ class CronTrigger(Trigger):
                 # A valid, but higher than the starting value, was found
                 if field.real:
                     next_time = self._set_field_value(next_time, fieldnum, next_value)
-                    if tz.datetime_exists(next_time):
-                        fieldnum += 1
-                    else:
-                        # skip non-existent date
-                        next_time, fieldnum = self._increment_field_value(
-                            next_time, fieldnum
-                        )
-
+                    fieldnum += 1
                 else:
                     next_time, fieldnum = self._increment_field_value(
                         next_time, fieldnum
